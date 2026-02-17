@@ -50,7 +50,9 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
+            console.log("Attempting login for:", email);
             const { data } = await api.post('/auth/login', { email, password });
+            console.log("Login success:", data);
             sessionStorage.setItem('accessToken', data.accessToken);
             sessionStorage.setItem('user', JSON.stringify(data));
             setAuth({
@@ -62,15 +64,18 @@ export const AuthProvider = ({ children }) => {
             toast.success("Login Successful");
             return data;
         } catch (error) {
-            console.error(error);
-            toast.error(error.response?.data?.message || "Login Failed");
+            console.error("Login Error:", error);
+            console.error("Login Error Response:", error.response);
+            toast.error(error.response?.data?.message || error.message || "Login Failed");
             throw error;
         }
     };
 
     const register = async (name, email, password) => {
         try {
+            console.log("Attempting registration for:", email);
             const { data } = await api.post('/auth/register', { name, email, password });
+            console.log("Registration success:", data);
             sessionStorage.setItem('accessToken', data.accessToken);
             sessionStorage.setItem('user', JSON.stringify(data));
             setAuth({
@@ -82,8 +87,9 @@ export const AuthProvider = ({ children }) => {
             toast.success("Registration Successful");
             return data;
         } catch (error) {
-            console.error(error);
-            toast.error(error.response?.data?.message || "Registration Failed");
+            console.error("Registration Error:", error);
+            console.error("Registration Error Response:", error.response);
+            toast.error(error.response?.data?.message || error.message || "Registration Failed");
             throw error;
         }
     };
